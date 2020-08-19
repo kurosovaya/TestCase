@@ -2,14 +2,14 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-import time
 from locators import MainPageLocators, ImagesPageLocators, SreachResultPageLocators
 from element import BasePageElement
 
 
 class SearchBarElement(BasePageElement):
 
-    locator = "text"
+    def __init__(self):
+        self.locator = "text"
 
 
 class BasePage():
@@ -34,7 +34,8 @@ class MainPage(BasePage):
             lambda driver: driver.find_elements(*MainPageLocators.POPUP_CONTENT))) != 0
 
     def press_enter(self):
-        self.driver.find_element_by_id("text").send_keys(Keys.RETURN)
+        self.driver.find_element(
+            *MainPageLocators.SEARCH_BAR).send_keys(Keys.RETURN)
 
     def is_images_button_present(self):
         return len(WebDriverWait(self.driver, 10).until(
@@ -78,6 +79,10 @@ class ImagesPage(BasePage):
         WebDriverWait(images, 10).until(
             EC.element_to_be_clickable((By.TAG_NAME, "a"))).click()
 
+    def is_image_present(self):
+        return WebDriverWait(self.driver, 10).until(
+            lambda driver: driver.find_elements(*ImagesPageLocators.IMAGE_BOX)) != 0
+
     def save_first_image_present(self):
         element = self.driver.find_element(*ImagesPageLocators.IMAGE_BOX)
 
@@ -109,13 +114,11 @@ class ImagesPage(BasePage):
         self.driver.execute_script("arguments[0].click();", prev_button)
 
     def is_the_same_image(self):
-        element = self.driver.find_element(
-            *ImagesPageLocators.IMAGE_BOX)
+        element = self.driver.find_element(*ImagesPageLocators.IMAGE_BOX)
 
         try:
             WebDriverWait(self.driver, 1).until(EC.staleness_of(element))
-            element = self.driver.find_element(
-                *ImagesPageLocators.IMAGE_BOX)
+            element = self.driver.find_element(*ImagesPageLocators.IMAGE_BOX)
         except:
             pass
 

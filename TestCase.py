@@ -6,7 +6,7 @@ from selenium import webdriver
 class YandexTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.driver = webdriver.Chrome()
+        self.driver = webdriver.Firefox()
         self.driver.get("https://yandex.ru/")
 
     def test_searchbar(self):
@@ -19,14 +19,15 @@ class YandexTestCase(unittest.TestCase):
         search_results_page = page.SearchResultPage(self.driver)
         assert search_results_page.is_result_correct()
 
-    def test_images(self):
+    def test_images_page(self):
         main_page = page.MainPage(self.driver)
         assert main_page.is_images_button_present()
         main_page.press_images_button()
 
         images_page = page.ImagesPage(self.driver)
-        assert images_page.is_url_correct()
+        assert images_page.is_url_correct()        
         images_page.press_first_image()
+        assert images_page.is_image_present()
         images_page.save_first_image_present()
         assert images_page.is_next_button_present()
         images_page.press_next_button()

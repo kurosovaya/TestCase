@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 
 class MainPageLocators():
     SEARCH_BAR = (By.ID, "text")
-    POPUP_CONTENT = (By.CLASS_NAME, "mini-suggest__popup-content")
+    POPUP_CONTENT = (By.CSS_SELECTOR, "div[class='mini-suggest__popup mini-suggest__popup_svg_yes mini-suggest__popup_theme_flat mini-suggest__popup_visible']")
     IMAGES_BUTTON = (By.LINK_TEXT, "Картинки")
 
 

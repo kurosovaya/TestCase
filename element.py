@@ -3,7 +3,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 class BasePageElement():    
 
-    locator = ""
+    def __init__(self):        
+        self.locator = ""
 
     def __set__(self, obj, value):
         driver = obj.driver
