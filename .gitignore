@@ -9,3 +9,5 @@ New folder/Test1Class.py
 __pycache__/page.cpython-38.pyc
 __pycache__/locators.cpython-38.pyc
 .vscode/settings.json
+TestCase.zip
+geckodriver.log

@@ -25,7 +25,7 @@ class YandexTestCase(unittest.TestCase):
         main_page.press_images_button()
 
         images_page = page.ImagesPage(self.driver)
-        assert images_page.is_url_correct()        
+        assert images_page.is_url_correct()
         images_page.press_first_image()
         assert images_page.is_image_present()
         images_page.save_first_image_present()

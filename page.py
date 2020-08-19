@@ -42,11 +42,12 @@ class MainPage(BasePage):
             lambda driver: driver.find_elements(*MainPageLocators.IMAGES_BUTTON))) != 0
 
     def press_images_button(self):
+        wait = WebDriverWait(self.driver, 10)
+
         self.driver.find_element(*MainPageLocators.IMAGES_BUTTON).click()
-        WebDriverWait(self.driver, 10).until(
-            lambda driver: len(driver.window_handles) == 2)
+        wait.until(EC.number_of_windows_to_be(2))
         self.driver.switch_to.window(self.driver.window_handles[-1])
-        WebDriverWait(self.driver, 10).until(lambda driver: driver.title != "")
+        wait.until(EC.title_contains("Яндекс.Картинки"))
 
 
 class SearchResultPage(BasePage):
@@ -70,7 +71,7 @@ class SearchResultPage(BasePage):
 class ImagesPage(BasePage):
 
     def is_url_correct(self):
-        return "https://yandex.ru/images/" == self.driver.current_url
+        return WebDriverWait(self.driver, 2).until(EC.url_matches("https://yandex.ru/images/"))
 
     def press_first_image(self):
         images = WebDriverWait(self.driver, 10).until(
@@ -84,16 +85,15 @@ class ImagesPage(BasePage):
             lambda driver: driver.find_elements(*ImagesPageLocators.IMAGE_BOX)) != 0
 
     def save_first_image_present(self):
-        element = self.driver.find_element(*ImagesPageLocators.IMAGE_BOX)
+        image = self.driver.find_element(*ImagesPageLocators.IMAGE_BOX)
 
         try:
-            WebDriverWait(self.driver, 1).until(EC.staleness_of(element))
-            element = self.driver.find_element(*ImagesPageLocators.IMAGE_BOX)
+            WebDriverWait(self.driver, 1).until(EC.staleness_of(image))
+            image = self.driver.find_element(*ImagesPageLocators.IMAGE_BOX)
         except:
             pass
 
-        src_str = element.get_attribute("src")
-        self.first_image_src = src_str
+        self.first_image_src = image.get_attribute("src")
 
     def is_next_button_present(self):
         return len(WebDriverWait(self.driver, 10).until(
@@ -114,13 +114,13 @@ class ImagesPage(BasePage):
         self.driver.execute_script("arguments[0].click();", prev_button)
 
     def is_the_same_image(self):
-        element = self.driver.find_element(*ImagesPageLocators.IMAGE_BOX)
+        image = self.driver.find_element(*ImagesPageLocators.IMAGE_BOX)
 
         try:
-            WebDriverWait(self.driver, 1).until(EC.staleness_of(element))
-            element = self.driver.find_element(*ImagesPageLocators.IMAGE_BOX)
+            WebDriverWait(self.driver, 1).until(EC.staleness_of(image))
+            image = self.driver.find_element(*ImagesPageLocators.IMAGE_BOX)
         except:
             pass
 
-        current_image_src = element.get_attribute("src")
+        current_image_src = image.get_attribute("src")
         return current_image_src == self.first_image_src
